@@ -43,11 +43,14 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
+         // バリデーション
+        $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255'],
+        ]);
+
         $user->name = $request->input('name') ? $request->input('name') : $user->name;
         $user->email = $request->input('email') ? $request->input('email') : $user->email;
-        $user->postal_code = $request->input('postal_code') ? $request->input('postal_code') : $user->postal_code;
-        $user->address = $request->input('address') ? $request->input('address') : $user->address;
-        $user->phone = $request->input('phone') ? $request->input('phone') : $user->phone;
         $user->update();
 
         return to_route('mypage')->with('flash_message', '会員情報を更新しました。');

@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-9 d-flex flex-column">
                             <h3 class="mb-0">会員情報の編集</h3>
-                            <p class="mb-0 text-secondary">メールアドレスや住所などを変更できます</p>
+                            <p class="mb-0 text-secondary">メールアドレスなどを変更できます</p>
                         </div>
                         <div class="col text-end">
                             <i class="fas fa-chevron-right fa-2x text-secondary"></i>
@@ -36,13 +36,13 @@
 
             {{-- ▼ 追加：食メモ記録一覧 --}}
             <div class="container">
-                <a href="{{ route('foods.index') }}" class="link-dark">
+                <a href="{{ route('album.index') }}" class="link-dark">
                     <div class="row justify-content-between align-items-center py-4 samuraimart-mypage-link">
                         <div class="col-1 ps-0 me-3">
                             <i class="fas fa-utensils fa-3x"></i>
                         </div>
                         <div class="col-9 d-flex flex-column">
-                            <h3 class="mb-0">食メモ記録一覧</h3>
+                            <h3 class="mb-0">アルバム</h3>
                             <p class="mb-0 text-secondary">今までの記録した食事を確認できます</p>
                         </div>
                         <div class="col text-end">

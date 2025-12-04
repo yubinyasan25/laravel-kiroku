@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>味メモ記録一覧</h1>
+    <h1>アルバム</h1>
     <a href="{{ route('foods.create') }}" class="btn btn-primary mb-3">新規登録</a>
 
     @if(session('success'))

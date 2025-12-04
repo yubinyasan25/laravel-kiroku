@@ -3,8 +3,6 @@ html {
 }
 
 body {
-    font-family: "メイリオ", "Meiryo", "Hiragino Kaku Gothic ProN",
-        "ヒラギノ角ゴ ProN W3", sans-serif;
     font-size: 14px;
     font-weight: 500;
     font-stretch: normal;
@@ -493,4 +491,43 @@ a img:hover {
 .btn-submit {
     width: 15%; /* 横幅1/3 */
     min-width: 100px; /* 小さい画面で極端に小さくならないように */
+}
+
+body,
+input,
+select,
+textarea,
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+label {
+    font-family: "Kosugi Maru", sans-serif !important;
+}
+
+.samuraimart-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* メイン部分がフッターを押し上げる */
+}
+
+footer {
+    height: 56px;
+    flex-shrink: 0; /* フッターを下に固定 */
+    background-color: #ffc107; /* 必要に応じて色 */
+}
+
+.btn-no-border {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }

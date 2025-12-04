@@ -21,8 +21,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// トップページを作成フォームに変更
-Route::get('/', [FoodController::class, 'create'])->name('top');
+// トップページをwelcome.blade.phpに変更
+Route::get('/', function () {
+    return view('welcome'); // resources/views/welcome.blade.php を表示
+})->name('top');
 
 // 認証ルート
 require __DIR__.'/auth.php';
@@ -66,8 +68,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // 食べたもの関連
-    Route::get('/foods', [FoodController::class, 'index'])->name('foods.index'); // 一覧ページ
-    Route::get('/foods/create', [FoodController::class, 'create'])->name('foods.create');
+    Route::get('/foods', [FoodController::class, 'index'])->name('album.index'); // 一覧ページ
+    Route::get('/foods/create', [FoodController::class, 'create'])->name('foods.create'); // 作成フォーム
     Route::post('/foods', [FoodController::class, 'store'])->name('foods.store'); // 登録処理
 
     // 編集、更新、削除などは resource でまとめる

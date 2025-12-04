@@ -34,7 +34,9 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn samuraimart-submit-button w-100 text-white">
+                    <button type="submit" 
+        class="btn samuraimart-submit-button w-100 text-white mb-4" 
+        style="border-radius: 8px; padding: 0.5rem 1rem; font-weight: 600;">
                         送信
                     </button>
                 </div>

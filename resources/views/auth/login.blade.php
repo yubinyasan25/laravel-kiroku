@@ -16,7 +16,7 @@
                 <p class="text-danger lh-lg">
                     動作確認用アカウント<br>
                     メールアドレス：test@example.com<br>
-                    パスワード：samurai1234<br>
+                    パスワード：password123<br>
                     テストカード：4242424242424242<br>
                     ※テストカード詳細は<a href="https://stripe.com/docs/testing?locale=ja-JP#use-test-cards">こちら</a>
                 </p>
@@ -57,8 +57,10 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn samuraimart-submit-button w-100 text-white mb-4">
-                    ログイン
+               <button type="submit" 
+                class="btn samuraimart-submit-button w-100 text-white mb-4" 
+                style="border-radius: 8px; padding: 0.5rem 1rem; font-weight: 600;">
+                ログイン
                 </button>
             </form>
 
