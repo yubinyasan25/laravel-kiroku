@@ -26,7 +26,7 @@
                             <p class="mb-0 text-secondary">メールアドレスなどを変更できます</p>
                         </div>
                         <div class="col text-end">
-                            <i class="fas fa-chevron-right fa-2x text-secondary"></i>
+                            <i class="fas fa-chevron-right fa-2x"></i>
                         </div>
                     </div>
                 </a>
@@ -46,7 +46,7 @@
                             <p class="mb-0 text-secondary">今までの記録した食事を確認できます</p>
                         </div>
                         <div class="col text-end">
-                            <i class="fas fa-chevron-right fa-2x text-secondary"></i>
+                            <i class="fas fa-chevron-right fa-2x"></i>
                         </div>
                     </div>
                 </a>
@@ -66,7 +66,7 @@
                             <p class="mb-0 text-secondary">ログイン時のパスワードを変更します</p>
                         </div>
                         <div class="col text-end">
-                            <i class="fas fa-chevron-right fa-2x text-secondary"></i>
+                            <i class="fas fa-chevron-right fa-2x"></i>
                         </div>
                     </div>
                 </a>
@@ -86,7 +86,7 @@
                             <p class="mb-0 text-secondary">味めぐりからログアウトします</p>
                         </div>
                         <div class="col text-end">
-                            <i class="fas fa-chevron-right fa-2x text-secondary"></i>
+                            <i class="fas fa-chevron-right fa-2x"></i>
                         </div>
                     </div>
                 </a>
@@ -100,4 +100,12 @@
         </div>
     </div>
 </div>
+
+{{-- ▼ アイコンをすべて記録ボタンと同じ色に統一 --}}
+<style>
+.samuraimart-mypage-link i {
+    color: #0fbe9f !important;
+}
+</style>
+
 @endsection
