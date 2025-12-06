@@ -20,7 +20,7 @@
                     </label>
 
                     <div class="col-md-7">
-                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror samuraimart-login-input" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="侍 太郎">
+                        <input id="name" type="text" class="form-control @error('name') is-invalid @enderror samuraimart-login-input" name="name" value="{{ old('name') }}" required autocomplete="name">
 
                         @error('name')
                             <span class="invalid-feedback" role="alert">
@@ -29,6 +29,28 @@
                         @enderror
                     </div>
                 </div>
+
+                     <div class="form-group row mb-3">
+                        <label for="nickname" class="col-md-5 col-form-label text-md-left fw-medium">
+                         ニックネーム
+                        <span class="ms-1 samuraimart-require-input-label">
+                             <span class="samuraimart-require-input-label-text">必須</span>
+                         </span>
+                    </label>
+
+                        <div class="col-md-7">
+                             <input id="nickname" type="text" 
+                            class="form-control @error('nickname') is-invalid @enderror samuraimart-login-input" 
+                            name="nickname" value="{{ old('nickname') }}" >
+
+                              @error('nickname')
+                         <span class="invalid-feedback" role="alert">
+                    <strong>ニックネームを入力してください</strong>
+                     </span>
+                    @enderror
+                </div>
+            </div>
+
 
                 <div class="form-group row mb-3">
                     <label for="email" class="col-md-5 col-form-label text-md-left fw-medium">
@@ -39,7 +61,7 @@
                     </label>
 
                     <div class="col-md-7">
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror samuraimart-login-input" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="samurai@samurai.com">
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror samuraimart-login-input" name="email" value="{{ old('email') }}" required autocomplete="email" >
 
                         @error('email')
                             <span class="invalid-feedback" role="alert">

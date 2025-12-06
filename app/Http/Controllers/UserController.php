@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\ShoppingCart;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -46,14 +44,18 @@ class UserController extends Controller
          // バリデーション
         $request->validate([
         'name' => ['required', 'string', 'max:255'],
+        'nickname' => ['nullable', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255'],
         ]);
 
-        $user->name = $request->input('name') ? $request->input('name') : $user->name;
-        $user->email = $request->input('email') ? $request->input('email') : $user->email;
-        $user->update();
+       // 更新処理
+        $user->name = $request->name;
+        $user->nickname = $request->nickname;
+        $user->email = $request->email;
 
-        return to_route('mypage')->with('flash_message', '会員情報を更新しました。');
+        $user->save();
+
+    return to_route('mypage')->with('flash_message', '会員情報を更新しました。');
     }
 
     public function update_password(Request $request)
@@ -92,42 +94,5 @@ class UserController extends Controller
     {
         Auth::user()->delete();
         return redirect('/')->with('flash_message', '退会が完了しました。');
-    }
-
-    public function cart_history_index(Request $request)
-    {
-        $page = $request->page != null ? $request->page : 1;
-        $user_id = Auth::user()->id;
-        $billings = ShoppingCart::getCurrentUserOrders($user_id);
-        $total = count($billings);
-        $billings = new LengthAwarePaginator(array_slice($billings, ($page - 1) * 15, 15), $total, 15, $page, array('path' => $request->url()));
-
-        return view('users.cart_history_index', compact('billings', 'total'));
-    }
-
-    public function cart_history_show(Request $request)
-    {
-        $num = $request->num;
-        $user_id = Auth::user()->id;
-        $cart_info = DB::table('shoppingcart')->where('instance', $user_id)->where('number', $num)->get()->first();
-        Cart::instance($user_id)->restore($cart_info->identifier);
-        $cart_contents = Cart::content();
-        Cart::instance($user_id)->store($cart_info->identifier);
-        Cart::destroy();
-
-        DB::table('shoppingcart')->where('instance', $user_id)
-            ->where('number', null)
-            ->update(
-                [
-                    'code' => $cart_info->code,
-                    'number' => $num,
-                    'price_total' => $cart_info->price_total,
-                    'qty' => $cart_info->qty,
-                    'buy_flag' => $cart_info->buy_flag,
-                    'updated_at' => $cart_info->updated_at
-                ]
-            );
-
-        return view('users.cart_history_show', compact('cart_contents', 'cart_info'));
-    }
+    }   
 }
