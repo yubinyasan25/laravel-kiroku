@@ -48,7 +48,7 @@
 
             {{-- ▼ アルバム --}}
             <div class="container">
-                <a href="{{ route('album.index') }}" class="link-dark">
+                <a href="{{ route('foods.index') }}" class="link-dark">
                     <div class="row justify-content-between align-items-center py-4 samuraimart-mypage-link">
                         <div class="col-1 ps-0 me-3">
                             <i class="fas fa-utensils fa-3x"></i>

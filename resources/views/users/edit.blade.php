@@ -105,9 +105,12 @@
 
             {{-- 退会リンク --}}
             <div class="text-center">
-                <a href="#" class="link-dark" data-bs-toggle="modal" data-bs-target="#deleteUserConfirmModal">
-                    退会する
-                </a>
+            <a href="#"
+               class="samuraimart-link"
+               data-bs-toggle="modal"
+               data-bs-target="#deleteUserConfirmModal">
+                退会する
+            </a>
             </div>
 
             {{-- 退会確認モーダル --}}

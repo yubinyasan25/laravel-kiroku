@@ -10,17 +10,10 @@ use Encore\Admin\Show;
 
 class UserController extends AdminController
 {
-    /**
-     * Title for current resource.
-     *
-     * @var string
-     */
     protected $title = 'User';
 
     /**
-     * Make a grid builder.
-     *
-     * @return Grid
+     * グリッド一覧
      */
     protected function grid()
     {
@@ -28,33 +21,26 @@ class UserController extends AdminController
 
         $grid->column('id', __('Id'))->sortable();
         $grid->column('name', __('Name'));
+        $grid->column('nickname', __('Nickname'));
         $grid->column('email', __('Email'));
         $grid->column('email_verified_at', __('Email verified at'));
-        $grid->column('postal_code', __('Postal code'));
-        $grid->column('address', __('Address'));
-        $grid->column('phone', __('Phone'));
         $grid->column('created_at', __('Created at'))->sortable();
         $grid->column('updated_at', __('Updated at'))->sortable();
         $grid->column('deleted_at', __('Deleted at'))->sortable();
 
         $grid->filter(function($filter) {
             $filter->like('name', 'ユーザー名');
+            $filter->like('nickname', 'ニックネーム');
             $filter->like('email', 'メールアドレス');
-            $filter->like('postal_code', '郵便番号');
-            $filter->like('address', '住所');
-            $filter->like('phone', '電話番号');
             $filter->between('created_at', '登録日')->datetime();
-            $filter->scope('trashed', 'Soft deleted data')->onlyTrashed();
+            $filter->scope('trashed', '退会済み')->onlyTrashed();
         });
 
         return $grid;
     }
 
     /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
+     * 詳細表示
      */
     protected function detail($id)
     {
@@ -62,11 +48,9 @@ class UserController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('name', __('Name'));
+        $show->field('nickname', __('Nickname'));
         $show->field('email', __('Email'));
         $show->field('email_verified_at', __('Email verified at'));
-        $show->field('postal_code', __('Postal code'));
-        $show->field('address', __('Address'));
-        $show->field('phone', __('Phone'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
         $show->field('deleted_at', __('Deleted at'));
@@ -75,29 +59,35 @@ class UserController extends AdminController
     }
 
     /**
-     * Make a form builder.
-     *
-     * @return Form
+     * フォーム
      */
     protected function form()
     {
         $form = new Form(new User());
 
-        $form->text('name', __('Name'));
-        $form->email('email', __('Email'));
+        $form->text('name', __('Name'))->required();
+        $form->text('nickname', __('Nickname'));
+        $form->email('email', __('Email'))->required();
         $form->datetime('email_verified_at', __('Email verified at'))->default(date('Y-m-d H:i:s'));
         $form->password('password', __('Password'));
-        $form->text('postal_code', __('Postal code'));
-        $form->textarea('address', __('Address'));
-        $form->mobile('phone', __('Phone'));
-        $form->datetime('deleted_at', __('Deleted at'))->default(NULL);
-
+        
+        // パスワードを保存する前にハッシュ化
         $form->saving(function (Form $form) {
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = bcrypt($form->password);
             } else {
                 $form->password = $form->model()->password;
             }
+        });
+
+        // 削除ボタンを押したときは forceDelete に変更
+        $form->deleting(function (Form $form) {
+            $form->model()->forceDelete();
+        });
+
+        // deleted_at はフォームに表示しない（管理用だけ）
+        $form->tools(function (Form\Tools $tools) {
+            $tools->disableDelete(); // 標準の削除は無効化
         });
 
         return $form;

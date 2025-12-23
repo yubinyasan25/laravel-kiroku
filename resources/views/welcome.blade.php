@@ -34,7 +34,7 @@
         @auth
             <a href="{{ route('mypage') }}" class="btn top-btn">マイページ</a>
             <a href="{{ route('foods.create') }}" class="btn top-btn">記録する</a>
-            <a href="{{ route('album.index') }}" class="btn top-btn">アルバム</a>
+            <a href="{{ route('foods.index') }}" class="btn top-btn">アルバム</a>
         @else
             <a href="{{ route('login') }}" class="btn top-btn">ログイン</a>
             <a href="{{ route('register') }}" class="btn top-btn top-btn-secondary">新規登録</a>

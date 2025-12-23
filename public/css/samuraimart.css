@@ -198,3 +198,38 @@ a img:hover {
     background-color: #ffc107;
     position: relative;
 }
+
+/* ログイン・登録 共通ボタン */
+.samuraimart-submit-button {
+    background-color: #0fbe9f; /* トップページボタンと統一 */
+    color: #ffffff !important;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+}
+
+.samuraimart-submit-button:hover {
+    background-color: #0ea28c;
+    color: #ffffff;
+}
+
+/* 必須ラベル（文字サイズをlabelと同じにする） */
+.samuraimart-require-input-label-text {
+    color: #dc3545; /* 赤色 */
+    font-weight: bold;
+    font-size: inherit; /* ← これがポイント */
+}
+
+/* ログイン画面のリンクと同じ見た目 */
+.samuraimart-link {
+    color: #0fbe9f;
+    font-size: 14px; /* ログイン画面と同じ */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.samuraimart-link:hover {
+    color: #0c997f;
+    text-decoration: underline;
+}

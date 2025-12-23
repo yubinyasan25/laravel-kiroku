@@ -11,22 +11,23 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up():void
     {
-        Schema::table('shoppingcart', function (Blueprint $table) {
-            $table->boolean('buy_flag')->default(false);
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('address')->nullable()->change();
         });
     }
+    
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
+    public function down():void
     {
-        Schema::table('shoppingcart', function (Blueprint $table) {
-            $table->dropColumn('buy_flag');
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('address')->nullable(false)->change();
         });
     }
 };

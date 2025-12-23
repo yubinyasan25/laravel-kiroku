@@ -1,12 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FoodController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,20 +11,15 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
-// トップページをwelcome.blade.phpに変更
+// トップページ
 Route::get('/', function () {
-    return view('welcome'); // resources/views/welcome.blade.php を表示
+    return view('welcome');
 })->name('top');
 
 // 認証ルート
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // 認証済みユーザー用ルート
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -53,25 +45,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('users/mypage/cart_history/{num}', 'cart_history_show')->name('mypage.cart_history_show');
     });
 
-    // カート
-    Route::controller(CartController::class)->group(function () {
-        Route::get('users/carts', 'index')->name('carts.index');
-        Route::post('users/carts', 'store')->name('carts.store');
-        Route::delete('users/carts', 'destroy')->name('carts.destroy');
-    });
-
-    // チェックアウト
-    Route::controller(CheckoutController::class)->group(function () {
-        Route::get('checkout', 'index')->name('checkout.index');
-        Route::post('checkout', 'store')->name('checkout.store');
-        Route::get('checkout/success', 'success')->name('checkout.success');
-    });
-
-    // 食べたもの関連
-    Route::get('/foods', [FoodController::class, 'index'])->name('album.index'); // 一覧ページ
-    Route::get('/foods/create', [FoodController::class, 'create'])->name('foods.create'); // 作成フォーム
-    Route::post('/foods', [FoodController::class, 'store'])->name('foods.store'); // 登録処理
-
-    // 編集、更新、削除などは resource でまとめる
-    Route::resource('foods', FoodController::class)->except(['index', 'create', 'store']);
+    // 食べたもの管理（resource 一本化）
+    Route::resource('foods', FoodController::class);
 });

@@ -97,4 +97,25 @@ public function update(Request $request, Food $food)
 
     return redirect()->route('foods.index')->with('success', '更新しました！');
 }
+
+// 編集フォーム
+public function edit(Food $food)
+{
+    return view('foods.edit', compact('food'));
+}
+
+// 削除処理
+public function destroy(Food $food)
+{
+    $food->delete();
+
+    return redirect()->route('foods.index')->with('success', '削除しました！');
+}
+
+// 詳細表示
+public function show(Food $food)
+{
+    return view('foods.show', compact('food'));
+}
+
 }
