@@ -27,7 +27,7 @@
         <div class="row g-3">
             @foreach($foods as $food)
                 @php
-                    // Cloudinary用にJSONを配列化
+                    // ローカル保存用にJSONを配列化
                     $photos = [];
                     if($food->photo_paths) {
                         $decoded = json_decode($food->photo_paths, true);
@@ -41,8 +41,8 @@
                     <div class="card shadow-sm h-100">
 
                         {{-- 写真 --}}
-                        @if(!empty($photos) && isset($photos[0]['url']))
-                           <img src="{{ $photos[0]['url'] }}"
+                        @if(!empty($photos))
+                           <img src="{{ asset('storage/' . $photos[0]) }}"
                                 class="card-img-top food-img"
                                 alt="{{ $food->name }}">
                         @else

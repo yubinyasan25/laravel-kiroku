@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Food;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Cloudinary\Cloudinary;
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
@@ -55,22 +55,11 @@ class FoodController extends Controller
             $data['category'] = json_encode($data['category']);
         }
 
-        $cloudinary = new Cloudinary([
-            'cloud' => [
-                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-                'api_key'    => env('CLOUDINARY_API_KEY'),
-                'api_secret' => env('CLOUDINARY_API_SECRET'),
-            ],
-        ]);
-
         $photo_paths = [];
         if($request->hasFile('photo')) {
             foreach($request->file('photo') as $photo){
-                $uploaded = $cloudinary->uploadApi()->upload($photo->getRealPath());
-                $photo_paths[] = [
-                    'url' => $uploaded['secure_url'],
-                    'public_id' => $uploaded['public_id']
-                ];
+                $path = $photo->store('foods', 'public');
+                $photo_paths[] = $path;
             }
         }
 
@@ -114,20 +103,12 @@ class FoodController extends Controller
 
         $existing_photos = $food->photo_paths ? json_decode($food->photo_paths, true) : [];
 
-        $cloudinary = new Cloudinary([
-            'cloud' => [
-                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-                'api_key'    => env('CLOUDINARY_API_KEY'),
-                'api_secret' => env('CLOUDINARY_API_SECRET'),
-            ],
-        ]);
-
         // 削除チェックされた写真
         if($request->has('photo_delete')) {
             $delete_indexes = $request->input('photo_delete');
             foreach($delete_indexes as $index) {
                 if(isset($existing_photos[$index])) {
-                    $cloudinary->uploadApi()->destroy($existing_photos[$index]['public_id']);
+                    Storage::disk('public')->delete($existing_photos[$index]);
                     unset($existing_photos[$index]);
                 }
             }
@@ -137,11 +118,8 @@ class FoodController extends Controller
         // 新しい写真アップロード
         if($request->hasFile('photo')) {
             foreach($request->file('photo') as $photo){
-                $uploaded = $cloudinary->uploadApi()->upload($photo->getRealPath());
-                $existing_photos[] = [
-                    'url' => $uploaded['secure_url'],
-                    'public_id' => $uploaded['public_id']
-                ];
+                $path = $photo->store('foods', 'public');
+                $existing_photos[] = $path;
             }
         }
 
@@ -159,16 +137,8 @@ class FoodController extends Controller
 
         $photos = $food->photo_paths ? json_decode($food->photo_paths,true) : [];
 
-        $cloudinary = new Cloudinary([
-            'cloud' => [
-                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-                'api_key'    => env('CLOUDINARY_API_KEY'),
-                'api_secret' => env('CLOUDINARY_API_SECRET'),
-            ],
-        ]);
-
         foreach($photos as $photo){
-            $cloudinary->uploadApi()->destroy($photo['public_id']);
+            Storage::disk('public')->delete($photo);
         }
 
         $food->delete();
