@@ -6,7 +6,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FoodController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PhotoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,3 +49,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 食べたもの管理（resource 一本化）
     Route::resource('foods', FoodController::class);
 });
+
+Route::get('/photos', [PhotoController::class, 'create'])->name('photos.create');
+Route::post('/photos/upload', [PhotoController::class, 'upload'])->name('photos.upload');
