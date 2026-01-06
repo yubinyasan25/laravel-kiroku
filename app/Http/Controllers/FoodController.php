@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Food;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
@@ -55,15 +54,12 @@ class FoodController extends Controller
             $data['category'] = json_encode($data['category']);
         }
 
-        $photo_paths = [];
+        // 画像を BLOB として保存（1枚目のみ）
         if($request->hasFile('photo')) {
-            foreach($request->file('photo') as $photo){
-                $path = $photo->store('foods', 'public');
-                $photo_paths[] = $path;
-            }
+            $file = $request->file('photo')[0];
+            $data['photo_blob'] = file_get_contents($file->getRealPath());
         }
 
-        $data['photo_paths'] = !empty($photo_paths) ? json_encode($photo_paths) : null;
         $data['user_id'] = Auth::id();
 
         Food::create($data);
@@ -92,7 +88,6 @@ class FoodController extends Controller
             'rating' => 'nullable|integer|min:1|max:5',
             'comment' => 'nullable|string',
             'photo.*' => 'nullable|image|max:2048',
-            'photo_delete' => 'nullable|array',
             'date' => 'required|date',
         ]);
 
@@ -101,29 +96,11 @@ class FoodController extends Controller
             $data['category'] = json_encode($data['category']);
         }
 
-        $existing_photos = $food->photo_paths ? json_decode($food->photo_paths, true) : [];
-
-        // 削除チェックされた写真
-        if($request->has('photo_delete')) {
-            $delete_indexes = $request->input('photo_delete');
-            foreach($delete_indexes as $index) {
-                if(isset($existing_photos[$index])) {
-                    Storage::disk('public')->delete($existing_photos[$index]);
-                    unset($existing_photos[$index]);
-                }
-            }
-            $existing_photos = array_values($existing_photos);
-        }
-
-        // 新しい写真アップロード
+        // 画像を更新（1枚目のみ）
         if($request->hasFile('photo')) {
-            foreach($request->file('photo') as $photo){
-                $path = $photo->store('foods', 'public');
-                $existing_photos[] = $path;
-            }
+            $file = $request->file('photo')[0];
+            $data['photo_blob'] = file_get_contents($file->getRealPath());
         }
-
-        $data['photo_paths'] = !empty($existing_photos) ? json_encode($existing_photos) : null;
 
         $food->update($data);
 
@@ -134,12 +111,6 @@ class FoodController extends Controller
     public function destroy(Food $food)
     {
         if($food->user_id !== Auth::id()) abort(403);
-
-        $photos = $food->photo_paths ? json_decode($food->photo_paths,true) : [];
-
-        foreach($photos as $photo){
-            Storage::disk('public')->delete($photo);
-        }
 
         $food->delete();
 

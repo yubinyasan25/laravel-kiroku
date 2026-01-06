@@ -26,25 +26,15 @@
         <h3 class="mt-4 mb-3">{{ $month }}</h3>
         <div class="row g-3">
             @foreach($foods as $food)
-                @php
-                    // ローカル保存用にJSONを配列化
-                    $photos = [];
-                    if($food->photo_paths) {
-                        $decoded = json_decode($food->photo_paths, true);
-                        if(is_array($decoded)) {
-                            $photos = $decoded;
-                        }
-                    }
-                @endphp
 
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="card shadow-sm h-100">
 
                         {{-- 写真 --}}
-                        @if(!empty($photos))
-                           <img src="{{ asset('storage/' . $photos[0]) }}"
-                                class="card-img-top food-img"
-                                alt="{{ $food->name }}">
+                        @if($food->photo_blob)
+                            <img src="data:image/jpeg;base64,{{ base64_encode($food->photo_blob) }}"
+                                 class="card-img-top food-img"
+                                 alt="{{ $food->name }}">
                         @else
                             <div class="food-img no-image d-flex align-items-center justify-content-center">
                                 <span class="text-muted">No Image</span>
@@ -141,7 +131,7 @@
 
 /* 写真 */
 .food-img {
-    height: 150px; /* 少し小さくして横4列でも収まる */
+    height: 150px;
     object-fit: cover;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
