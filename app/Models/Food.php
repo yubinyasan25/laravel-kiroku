@@ -9,15 +9,23 @@ class Food extends Model
 {
     use HasFactory;
 
-    // フォームから一括代入できるカラムを指定
-    protected $table = 'foods'; 
+    // ← これを明示的に指定（安心）
+    protected $table = 'foods';
+
     protected $fillable = [
+        'user_id',
         'name',
-        'genre',
+        'date',
+        'category',
         'store_name',
         'price',
         'rating',
         'comment',
-        'photo_path'
+        'photo_paths',
+       
+    ];
+
+    protected $casts = [
+        'date' => 'date',
     ];
 }

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="text-center mb-4">食メモ</h1>
+    <h1 class="text-center mb-4">食レポ</h1>
 
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -78,6 +78,7 @@
                     </div>
 
                     <!-- 写真 -->
+                    
                     <div class="col-md-12 d-flex gap-2">
                         <div class="flex-grow-1">
                             <label class="form-label d-block mb-2">写真</label>
@@ -95,7 +96,7 @@
 
                     <!-- 登録ボタン -->
                     <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary">登録</button>
+                        <button type="submit" class="btn samuraimart-submit-button">登録</button>
                     </div>
 
                 </div>

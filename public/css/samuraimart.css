@@ -233,3 +233,17 @@ a img:hover {
     color: #0c997f;
     text-decoration: underline;
 }
+
+.samuraimart-submit-button {
+    background-color: #0fbe9f; /* トップページログインボタンと同じ色 */
+    color: #fff;
+    border-radius: 8px; /* 角丸 */
+    padding: 0.5rem 1rem; /* 高さ・横幅 */
+    font-weight: 600; /* 太さ */
+    font-size: 1rem; /* フォントサイズ */
+    transition: all 0.2s;
+}
+
+.samuraimart-submit-button:hover {
+    background-color: #0da88d; /* ホバー時の色変化 */
+}
