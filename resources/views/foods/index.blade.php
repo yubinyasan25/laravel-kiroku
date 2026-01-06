@@ -27,16 +27,24 @@
         <div class="row g-3">
             @foreach($foods as $food)
                 @php
-                    $photos = $food->photo_paths ? json_decode($food->photo_paths, true) : [];
+                    // Cloudinary用にJSONを配列化
+                    $photos = [];
+                    if($food->photo_paths) {
+                        $decoded = json_decode($food->photo_paths, true);
+                        if(is_array($decoded)) {
+                            $photos = $decoded;
+                        }
+                    }
                 @endphp
+
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="card shadow-sm h-100">
 
                         {{-- 写真 --}}
-                        @if(!empty($photos))
-                           <img src="{{ $photos[0]['url'] }}"  {{-- 既にCloudinaryのフルURLを持っている前提 --}}
-                             class="card-img-top food-img"
-                             alt="{{ $food->name }}">
+                        @if(!empty($photos) && isset($photos[0]['url']))
+                           <img src="{{ $photos[0]['url'] }}"
+                                class="card-img-top food-img"
+                                alt="{{ $food->name }}">
                         @else
                             <div class="food-img no-image d-flex align-items-center justify-content-center">
                                 <span class="text-muted">No Image</span>
