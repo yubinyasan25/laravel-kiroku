@@ -34,9 +34,9 @@
 
                         {{-- 写真 --}}
                         @if(!empty($photos))
-                            <img src="{{ asset('storage/'.$photos[0]) }}"
-                                 class="card-img-top food-img"
-                                 alt="{{ $food->name }}">
+                           <img src="{{ $photos[0] }}"  {{-- 既にCloudinaryのフルURLを持っている前提 --}}
+                             class="card-img-top food-img"
+                             alt="{{ $food->name }}">
                         @else
                             <div class="food-img no-image d-flex align-items-center justify-content-center">
                                 <span class="text-muted">No Image</span>
