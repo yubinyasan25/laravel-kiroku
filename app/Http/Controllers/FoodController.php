@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Food;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Cloudinary\Laravel\Facades\Cloudinary;
+use Cloudinary\Cloudinary;
 
 class FoodController extends Controller
 {
@@ -21,8 +21,7 @@ class FoodController extends Controller
         $foods = Food::where('user_id', auth()->id())
                  ->orderBy('date', 'desc')
                  ->get();
-        
-        // 月ごとにグループ化（YYYY-MM形式）
+
         $foodsByMonth = $foods->groupBy(function($item) {
             return \Carbon\Carbon::parse($item->date)->format('Y-m');
         });
@@ -56,21 +55,26 @@ class FoodController extends Controller
             $data['category'] = json_encode($data['category']);
         }
 
-        // Cloudinary にアップロード
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+        ]);
+
         $photo_paths = [];
         if($request->hasFile('photo')) {
             foreach($request->file('photo') as $photo){
-                if($photo){
-                    $uploaded = Cloudinary::upload($photo->getRealPath());
-                    $photo_paths[] = [
-                        'url' => $uploaded->getSecurePath(),
-                        'public_id' => $uploaded->getPublicId()
-                    ];
-                }
+                $uploaded = $cloudinary->uploadApi()->upload($photo->getRealPath());
+                $photo_paths[] = [
+                    'url' => $uploaded['secure_url'],
+                    'public_id' => $uploaded['public_id']
+                ];
             }
         }
 
-        $data['photo_paths'] = $photo_paths ? json_encode($photo_paths) : null;
+        $data['photo_paths'] = !empty($photo_paths) ? json_encode($photo_paths) : null;
         $data['user_id'] = Auth::id();
 
         Food::create($data);
@@ -110,12 +114,20 @@ class FoodController extends Controller
 
         $existing_photos = $food->photo_paths ? json_decode($food->photo_paths, true) : [];
 
-        // 削除チェックされた写真を Cloudinary から削除
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+        ]);
+
+        // 削除チェックされた写真
         if($request->has('photo_delete')) {
             $delete_indexes = $request->input('photo_delete');
             foreach($delete_indexes as $index) {
                 if(isset($existing_photos[$index])) {
-                    Cloudinary::destroy($existing_photos[$index]['public_id']);
+                    $cloudinary->uploadApi()->destroy($existing_photos[$index]['public_id']);
                     unset($existing_photos[$index]);
                 }
             }
@@ -125,13 +137,11 @@ class FoodController extends Controller
         // 新しい写真アップロード
         if($request->hasFile('photo')) {
             foreach($request->file('photo') as $photo){
-                if($photo){
-                    $uploaded = Cloudinary::upload($photo->getRealPath());
-                    $existing_photos[] = [
-                        'url' => $uploaded->getSecurePath(),
-                        'public_id' => $uploaded->getPublicId()
-                    ];
-                }
+                $uploaded = $cloudinary->uploadApi()->upload($photo->getRealPath());
+                $existing_photos[] = [
+                    'url' => $uploaded['secure_url'],
+                    'public_id' => $uploaded['public_id']
+                ];
             }
         }
 
@@ -148,8 +158,17 @@ class FoodController extends Controller
         if($food->user_id !== Auth::id()) abort(403);
 
         $photos = $food->photo_paths ? json_decode($food->photo_paths,true) : [];
+
+        $cloudinary = new Cloudinary([
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET'),
+            ],
+        ]);
+
         foreach($photos as $photo){
-            Cloudinary::destroy($photo['public_id']);
+            $cloudinary->uploadApi()->destroy($photo['public_id']);
         }
 
         $food->delete();

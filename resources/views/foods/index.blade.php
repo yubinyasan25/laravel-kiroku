@@ -34,7 +34,7 @@
 
                         {{-- 写真 --}}
                         @if(!empty($photos))
-                           <img src="{{ $photos[0] }}"  {{-- 既にCloudinaryのフルURLを持っている前提 --}}
+                           <img src="{{ $photos[0]['url'] }}"  {{-- 既にCloudinaryのフルURLを持っている前提 --}}
                              class="card-img-top food-img"
                              alt="{{ $food->name }}">
                         @else

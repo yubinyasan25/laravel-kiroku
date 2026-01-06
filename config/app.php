@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+use Cloudinary\Laravel\Facades\Cloudinary;
 
 return [
 
@@ -209,7 +210,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Cloudinary' => \Cloudinary\Laravel\Facades\Cloudinary::class,
     ])->toArray(),
 
 ];
