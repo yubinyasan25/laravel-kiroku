@@ -51,7 +51,7 @@
                         @else
                             {{-- 本番（Heroku） or 画像なし：サンプル画像 --}}
                             <img
-                                src="{{ asset('images/sample_food.jpg') }}"
+                                src="{{ asset('img/sample_food.jpg') }}"
                                 class="card-img-top food-img"
                                 alt="サンプル画像"
                             >

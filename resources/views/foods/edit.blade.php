@@ -131,7 +131,7 @@
                                 @endforeach
                             </div>
                         @else
-                            <img src="{{ asset('images/sample_food.jpg') }}"
+                            <img src="{{ asset('img/sample_food.jpg') }}"
                                  style="width:120px;height:120px;object-fit:cover;border-radius:8px;">
                             <p class="text-muted small mt-1">
                                 ※ 本番環境では画像編集はできません
