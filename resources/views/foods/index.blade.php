@@ -26,22 +26,44 @@
         <h3 class="mt-4 mb-3">{{ $month }}</h3>
         <div class="row g-3">
             @foreach($foods as $food)
+<<<<<<< HEAD
+=======
+                @php
+                    // photo_paths(JSON) → 配列
+                    $photos = [];
+                    if ($food->photo_paths) {
+                        $decoded = json_decode($food->photo_paths, true);
+                        if (is_array($decoded)) {
+                            $photos = $decoded;
+                        }
+                    }
+                @endphp
+>>>>>>> a90053d (Add sample image for production)
 
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="card shadow-sm h-100">
 
                         {{-- 写真 --}}
-                        @if($food->photo_blob)
-                            <img src="data:image/jpeg;base64,{{ base64_encode($food->photo_blob) }}"
-                                 class="card-img-top food-img"
-                                 alt="{{ $food->name }}">
+
+
+                        @if(app()->isLocal() && !empty($photos))
+                            {{-- ローカル環境：アップロード画像 --}}
+                            <img
+                                src="{{ asset('storage/' . $photos[0]) }}"
+                                class="card-img-top food-img"
+                                alt="{{ $food->name }}"
+                            >
                         @else
-                            <div class="food-img no-image d-flex align-items-center justify-content-center">
-                                <span class="text-muted">No Image</span>
-                            </div>
+                            {{-- 本番（Heroku） or 画像なし：サンプル画像 --}}
+                            <img
+                                src="{{ asset('images/sample_food.jpg') }}"
+                                class="card-img-top food-img"
+                                alt="サンプル画像"
+                            >
                         @endif
 
                         <div class="card-body p-2">
+
                             {{-- 商品名 --}}
                             <h5 class="card-title fw-bold mb-1" style="font-size:0.95rem;">
                                 {{ $food->name }}
@@ -87,7 +109,7 @@
                                 {{ $food->comment }}
                             </p>
 
-                            {{-- 編集・削除ボタン --}}
+                            {{-- 編集・削除 --}}
                             <div class="d-flex justify-content-end gap-1">
                                 <a href="{{ route('foods.edit', $food) }}"
                                    class="btn btn-sm album-edit-btn">
@@ -135,12 +157,6 @@
     object-fit: cover;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
-}
-
-/* 画像がない場合 */
-.no-image {
-    background-color: #f5f5f5;
-    height: 150px;
 }
 
 /* カード */

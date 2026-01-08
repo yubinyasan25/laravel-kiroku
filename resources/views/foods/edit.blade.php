@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    {{-- 店名・価格・評価（★は記録画面と完全一致） --}}
+                    {{-- 店名・価格・評価 --}}
                     <div class="col-md-12 d-flex gap-2 align-items-start">
 
                         <div class="flex-grow-1">
@@ -81,7 +81,7 @@
                             </div>
                         </div>
 
-                        {{-- ★評価（createと完全同一CSS & 構造） --}}
+                        {{-- ★評価 --}}
                         <div class="flex-grow-1">
                             <label class="form-label">評価</label>
                             <div class="star-box form-control">
@@ -108,16 +108,14 @@
                                   rows="3">{{ old('comment', $food->comment) }}</textarea>
                     </div>
 
-                    {{-- 既存写真（削除が直感的） --}}
-                    @php
-                        $photos = $food->photo_paths
-                            ? json_decode($food->photo_paths, true)
-                            : [];
-                    @endphp
+                    {{-- 既存写真 --}}
+                    <div class="col-md-12">
+                        <label class="form-label">登録済みの写真</label>
 
-                    @if(!empty($photos))
-                        <div class="col-md-12">
-                            <label class="form-label">登録済みの写真</label>
+                        @if(app()->isLocal() && !empty($food->photo_paths))
+                            @php
+                                $photos = json_decode($food->photo_paths, true) ?? [];
+                            @endphp
 
                             <div class="d-flex gap-3 flex-wrap">
                                 @foreach($photos as $path)
@@ -132,21 +130,29 @@
                                     </div>
                                 @endforeach
                             </div>
+                        @else
+                            <img src="{{ asset('images/sample_food.jpg') }}"
+                                 style="width:120px;height:120px;object-fit:cover;border-radius:8px;">
+                            <p class="text-muted small mt-1">
+                                ※ 本番環境では画像編集はできません
+                            </p>
+                        @endif
+                    </div>
+
+                    {{-- 写真追加（ローカルのみ） --}}
+                    @if(app()->isLocal())
+                        <div class="col-md-12">
+                            <label class="form-label">写真追加</label>
+                            <div class="d-flex gap-2">
+                                @for($i=0; $i<3; $i++)
+                                    <input type="file"
+                                           name="photo[]"
+                                           class="form-control"
+                                           accept="image/*">
+                                @endfor
+                            </div>
                         </div>
                     @endif
-
-                    {{-- 写真追加（崩れない） --}}
-                    <div class="col-md-12">
-                        <label class="form-label">写真追加</label>
-                        <div class="d-flex gap-2">
-                            @for($i=0; $i<3; $i++)
-                                <input type="file"
-                                       name="photo[]"
-                                       class="form-control"
-                                       accept="image/*">
-                            @endfor
-                        </div>
-                    </div>
 
                     {{-- 更新 --}}
                     <div class="col-md-12 text-center mt-3">
@@ -162,7 +168,7 @@
     </div>
 </div>
 
-{{-- CSS（create と完全統一） --}}
+{{-- CSS --}}
 <style>
 body, input, textarea, button, label {
     font-family: 'Kosugi Maru', sans-serif;
