@@ -26,8 +26,6 @@
         <h3 class="mt-4 mb-3">{{ $month }}</h3>
         <div class="row g-3">
             @foreach($foods as $food)
-<<<<<<< HEAD
-=======
                 @php
                     // photo_paths(JSON) → 配列
                     $photos = [];
@@ -38,14 +36,11 @@
                         }
                     }
                 @endphp
->>>>>>> a90053d (Add sample image for production)
 
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="card shadow-sm h-100">
 
                         {{-- 写真 --}}
-
-
                         @if(app()->isLocal() && !empty($photos))
                             {{-- ローカル環境：アップロード画像 --}}
                             <img
@@ -64,12 +59,10 @@
 
                         <div class="card-body p-2">
 
-                            {{-- 商品名 --}}
                             <h5 class="card-title fw-bold mb-1" style="font-size:0.95rem;">
                                 {{ $food->name }}
                             </h5>
 
-                            {{-- カテゴリ --}}
                             <div class="mb-1">
                                 @if($food->category)
                                     @foreach(json_decode($food->category, true) as $category)
@@ -82,18 +75,15 @@
                                 @endif
                             </div>
 
-                            {{-- 日付 --}}
                             <div class="text-muted small mb-1">
                                 {{ \Carbon\Carbon::parse($food->date)->format('Y年n月j日') }}
                             </div>
 
-                            {{-- 店舗・価格 --}}
                             <div class="text-muted small mb-1">
                                 店舗：{{ $food->store_name ?? '-' }}<br>
                                 価格：{{ $food->price ?? '-' }}円
                             </div>
 
-                            {{-- 評価 --}}
                             <div class="mb-1">
                                 @if($food->rating)
                                     <span class="star-display">
@@ -104,12 +94,10 @@
                                 @endif
                             </div>
 
-                            {{-- コメント --}}
                             <p class="text-muted" style="font-size:0.8rem; max-height:3em; overflow:hidden;">
                                 {{ $food->comment }}
                             </p>
 
-                            {{-- 編集・削除 --}}
                             <div class="d-flex justify-content-end gap-1">
                                 <a href="{{ route('foods.edit', $food) }}"
                                    class="btn btn-sm album-edit-btn">
@@ -137,7 +125,6 @@
     @endforelse
 </div>
 
-{{-- CSS --}}
 <style>
 .samuraimart-submit-button {
     background-color: #0fbe9f !important;
@@ -145,13 +132,8 @@
     border-radius: 8px;
     padding: 0.5rem 1rem;
     font-weight: 600;
-    transition: all 0.2s;
-}
-.samuraimart-submit-button:hover {
-    background-color: #0da88d !important;
 }
 
-/* 写真 */
 .food-img {
     height: 150px;
     object-fit: cover;
@@ -159,43 +141,27 @@
     border-top-right-radius: 0.75rem;
 }
 
-/* カード */
 .card {
     border-radius: 0.75rem;
     overflow: hidden;
-    height: 100%;
 }
 
-/* ★評価 */
 .star-display {
     color: #ffc107;
-    font-size: 1rem;
-    letter-spacing: 1px;
 }
 
-/* 編集・削除ボタン */
 .album-edit-btn {
     background-color: #0fbe9f;
     color: #fff;
-    border: none;
     border-radius: 6px;
     font-size: 0.7rem;
-    padding: 0.2rem 0.4rem;
-}
-.album-edit-btn:hover {
-    background-color: #0da88d;
 }
 
 .album-delete-btn {
     background-color: #dc3545;
     color: #fff;
-    border: none;
     border-radius: 6px;
     font-size: 0.7rem;
-    padding: 0.2rem 0.4rem;
-}
-.album-delete-btn:hover {
-    background-color: #bb2d3b;
 }
 </style>
 @endsection
